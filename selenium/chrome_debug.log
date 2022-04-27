@@ -1,4 +1,0 @@
-[11144:259:0407/133923.914883:ERROR:mach_port_rendezvous.cc(310)] bootstrap_look_up com.google.Chrome.MachPortRendezvousServer.1: Unknown service name (1102)
-[11145:259:0407/133923.921380:ERROR:mach_port_rendezvous.cc(310)] bootstrap_look_up com.google.Chrome.MachPortRendezvousServer.1: Unknown service name (1102)
-[11145:259:0407/133923.923049:ERROR:child_thread_impl.cc(226)] Mach rendezvous failed, terminating process (parent died?)
-[11144:259:0407/133924.942586:ERROR:child_thread_impl.cc(226)] Mach rendezvous failed, terminating process (parent died?)
