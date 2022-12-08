@@ -1,5 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
 from bs4 import BeautifulSoup
 import re
 from datetime import datetime
@@ -13,8 +15,9 @@ class Fireball_Scraper:
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("ignore-certificate-errors")
         chrome_options.add_argument("user-data-dir=selenium")
-        chrome_options.add_argument("--headless")
-        self.driver = webdriver.Chrome('/usr/local/bin/chromedriver',options=chrome_options)
+        s = Service('/usr/local/bin/chromedriver')
+        # chrome_options.add_argument("--headless")
+        self.driver = webdriver.Chrome(service=s,options=chrome_options)
         self.data = {}
         self.links = []
 
@@ -34,7 +37,7 @@ class Fireball_Scraper:
                         self.data[link.text[1:]]["event"] = link.text[1:]
                         self.data[link.text[1:]]["link"] = "https://fireball.amsmeteors.org/{}".format(link['href'])
                     if "next" in link.text:
-                        element = self.driver.find_element_by_partial_link_text("next")
+                        element = self.driver.find_element(By.PARTIAL_LINK_TEXT, "next")
                         element.click()
                         next_page = True
                         break
@@ -43,18 +46,21 @@ class Fireball_Scraper:
     def get_pages(self):
         main_page = 'https://www.amsmeteors.org/fireballs/fireball-report/'
         self.driver.get(main_page)
-        logs = self.driver.find_elements_by_partial_link_text('Fireball Sightings Log')
+        logs = self.driver.find_elements(By.PARTIAL_LINK_TEXT, 'Fireball Sightings Log')
+        links = {}
         for year in logs:
-            year.click()
-            dropdown = self.driver.find_element_by_class_name('form-group')
-            for option in dropdown.find_elements_by_tag_name('option'):
+            links[year.text] = year.get_attribute('href')
+        for year in links:
+            self.driver.get(links[year])
+            dropdown = self.driver.find_element(By.CLASS_NAME, 'form-group')
+            for option in dropdown.find_elements(By.TAG_NAME, 'option'):
                 if option.text == 'United States':
                     option.click()
                     break
             self.get_events()
             self.collect_data()
             # pickle.dump(self.data, open("fireball_data.p", "wb"))
-            print("{} completed and dumped".format(year.text))
+            print("{} completed and dumped".format(year))
 
 
     def collect_data(self):
@@ -81,7 +87,7 @@ class Fireball_Scraper:
                 traceback.print_exc()
                 print(len(self.data))
                 print(link)
-        self.driver.quit()
+        # self.driver.quit()
 
         
 
