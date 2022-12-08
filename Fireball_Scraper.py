@@ -88,7 +88,7 @@ class Fireball_Scraper:
                 self.data[item]["long"] = long
                 self.data[item]["date"] = date
                 self.data[item]["time"] = time
-                pickle.dump(self.data, open("fireball_data.p", "wb"))
+                # pickle.dump(self.data, open("fireball_data.p", "wb"))
             except:
                 traceback.print_exc()
                 print(len(self.data))

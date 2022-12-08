@@ -10,13 +10,14 @@ from geopy.geocoders import Nominatim
 import geocoder
 from geopy.geocoders import ArcGIS
 import pickle
+import traceback
 
 class Sprite_Scraper():
     def __init__(self):
         self.driver = None
         self.link = "https://spaceweathergallery.com/index.php?title=sprite"
-        self.list = []
-        # self.list = pickle.load(open("sprites.p", "rb"))
+        # self.list = []
+        self.list = pickle.load(open("sprites.p", "rb"))
 
     def scrape_pages(self):
         chrome_options = Options()
@@ -77,10 +78,17 @@ class Sprite_Scraper():
         for e in self.list:
             for l in e:
                 # print(l[-1])
-                location = geolocator.geocode(l[-1], out_fields='Country')
-                # print(location.raw['attributes']['Country'])
-                l.append(location.raw['attributes']['Country'])
-                # print(l)
+                try:
+
+                    location = geolocator.geocode(l[-1], out_fields='Country', timeout=3)
+                    # print(location.raw['attributes']['Country'])
+                    l.append(location.raw['attributes']['Country'])
+                    # print(l)
+                except:
+                    traceback.print_exc()
+                    print("ENTRY THAT FAILED: {}".format(l))
+                    print("Location: {}".format(location))
+                    print()
 
     
     def remove_non_US(self):
@@ -95,7 +103,7 @@ class Sprite_Scraper():
 
 if __name__ == "__main__":
     scraper = Sprite_Scraper()
-    scraper.scrape_pages()
+    # scraper.scrape_pages()
     scraper.geopy()
     scraper.dump_data()
     scraper.remove_non_US()
