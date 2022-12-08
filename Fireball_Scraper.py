@@ -18,6 +18,7 @@ class Fireball_Scraper:
         s = Service('/usr/local/bin/chromedriver')
         # chrome_options.add_argument("--headless")
         self.driver = webdriver.Chrome(service=s,options=chrome_options)
+        self.data_to_collect = {}
         self.data = {}
         self.links = []
 
@@ -33,9 +34,10 @@ class Fireball_Scraper:
                 # print(link)
                 if link.get('href') is not None:
                     if "/members/imo_view/event/" in link['href']:
-                        self.data[link.text[1:]] = {}
-                        self.data[link.text[1:]]["event"] = link.text[1:]
-                        self.data[link.text[1:]]["link"] = "https://fireball.amsmeteors.org/{}".format(link['href'])
+                        # self.data[link.text[1:]] = {}
+                        # self.data[link.text[1:]]["event"] = link.text[1:]
+                        # self.data[link.text[1:]]["link"] = "https://fireball.amsmeteors.org/{}".format(link['href'])
+                        self.data_to_collect[link.text[1:]] = "https://fireball.amsmeteors.org/{}".format(link['href'])
                     if "next" in link.text:
                         element = self.driver.find_element(By.PARTIAL_LINK_TEXT, "next")
                         element.click()
@@ -59,13 +61,16 @@ class Fireball_Scraper:
                     break
             self.get_events()
             self.collect_data()
+            self.data_to_collect = {}
             # pickle.dump(self.data, open("fireball_data.p", "wb"))
             print("{} completed and dumped".format(year))
+            # break
+        self.driver.quit()
 
 
     def collect_data(self):
-        for item in self.data:
-            link = self.data[item]["link"]
+        for item in self.data_to_collect:
+            link = self.data_to_collect[item]
             self.driver.get(link)
             text = self.driver.page_source
             try:
@@ -78,6 +83,8 @@ class Fireball_Scraper:
                 date = "{}{}".format(date[0][0], date[0][1])
                 date = str(datetime.strptime(date, '%B %d %Y')).split(" ")[0]
                 time = str(tstamp[0][1])
+                self.data[item] = {}
+                self.data[item]["link"] = self.data_to_collect[item]
                 self.data[item]["lat"] = lat
                 self.data[item]["long"] = long
                 self.data[item]["date"] = date
