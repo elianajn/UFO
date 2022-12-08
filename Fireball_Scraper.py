@@ -62,7 +62,6 @@ class Fireball_Scraper:
             self.get_events()
             self.collect_data()
             self.data_to_collect = {}
-            # pickle.dump(self.data, open("fireball_data.p", "wb"))
             print("{} completed and dumped".format(year))
             # break
         self.driver.quit()
