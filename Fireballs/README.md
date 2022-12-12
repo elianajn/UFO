@@ -1,5 +1,4 @@
 # Fireballs 
-Red sprites are a weather phenomenon that appear as luminous red-orange flashes that could be mistaken for UFOs. Scientifically, 
 > A fireball is another term for a very bright meteor, generally brighter than magnitude -4, which is about the same magnitude of the planet Venus as seen in the morning or evening sky.  
 > [FIREBALLS - American Meteor Society](https://www.amsmeteors.org/fireballs/) 
 
