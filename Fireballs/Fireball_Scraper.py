@@ -16,7 +16,7 @@ class Fireball_Scraper:
         chrome_options.add_argument("ignore-certificate-errors")
         chrome_options.add_argument("user-data-dir=selenium")
         s = Service('/usr/local/bin/chromedriver')
-        # chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--headless")
         self.driver = webdriver.Chrome(service=s,options=chrome_options)
         self.data_to_collect = {}
         self.data = {}
@@ -31,12 +31,8 @@ class Fireball_Scraper:
             soup = BeautifulSoup(text, 'html.parser')
             self.link = None
             for link in soup.find_all('a'):
-                # print(link)
                 if link.get('href') is not None:
                     if "/members/imo_view/event/" in link['href']:
-                        # self.data[link.text[1:]] = {}
-                        # self.data[link.text[1:]]["event"] = link.text[1:]
-                        # self.data[link.text[1:]]["link"] = "https://fireball.amsmeteors.org/{}".format(link['href'])
                         self.data_to_collect[link.text[1:]] = "https://fireball.amsmeteors.org/{}".format(link['href'])
                     if "next" in link.text:
                         element = self.driver.find_element(By.PARTIAL_LINK_TEXT, "next")
@@ -63,7 +59,6 @@ class Fireball_Scraper:
             self.collect_data()
             self.data_to_collect = {}
             print("{} completed and dumped".format(year))
-            # break
         self.driver.quit()
 
 
@@ -88,12 +83,10 @@ class Fireball_Scraper:
                 self.data[item]["long"] = long
                 self.data[item]["date"] = date
                 self.data[item]["time"] = time
-                pickle.dump(self.data, open("fireball_data3.p", "wb"))
+                pickle.dump(self.data, open("fireball_data.p", "wb"))
             except:
                 traceback.print_exc()
-                print(len(self.data))
-                print(link)
-        # self.driver.quit()
+                print("Failed at: {} {}".format(item, self.data_to_collect[item]))
 
         
 
@@ -101,9 +94,8 @@ if __name__ == "__main__":
     scraper = Fireball_Scraper()
     try:
         scraper.get_pages()
-        print(len(scraper.data))
     except:
         traceback.print_exc()
-        print(scraper.driver.current_url)
+        print("Failed on URL: {}".format(scraper.driver.current_url))
         scraper.driver.quit()
     

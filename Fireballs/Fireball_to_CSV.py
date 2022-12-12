@@ -13,9 +13,7 @@ with open('Fireballs.csv', 'w', newline='') as csvfile:
             invalid += 1
             continue
         row = {'Event':event, 'Lat':data[event]['lat'][0], 'Long':data[event]['long'][0], 'Date':data[event]['date'], 'Time':data[event]['time'], 'Report':data[event]['link']}
-        # print(row)
         writer.writerow(row)
         sum += 1
-        # break
     csvfile.close()
     print("Sum: {}, Invalid: {}".format(sum, invalid))
