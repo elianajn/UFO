@@ -5,7 +5,7 @@ Red sprites are a weather phenomenon that appear as luminous red-orange flashes 
 
 | [Photo by Petr Horalek](https://spaceweathergallery.com/indiv_upload.php?upload_id=176463) | [Photo by Frankie Lucena](https://spaceweathergallery.com/indiv_upload.php?upload_id=168570) |
 | --- | --- |
-![](176463.png) | ![](168570.png) |
+![](assets/176463.png) | ![](assets/168570.png) |
 
 
 ## Data 
@@ -13,7 +13,8 @@ The largest dataset of Red Sprite sightings I was able to find was this photo se
 
 ## Files
 * `Sprite_Scraper.py`: Scrapes and formats sprite data from Spaceweather.com. Geocodes all sprites, removes non-US data points, and appends lat/long for relevant sightings. Dumps two serialized Pickle python dictionaries, `sprites.p` and `failed_sprites.p` 
-* `Sprite_to_CSV.py`: Loads serialized dictionary `sprites.p`, creates `Sprites.csv` and outputs scraped data to CSV compatible with GIS
+* `Sprite_to_CSV.py`: Loads serialized dictionary `sprites.p`, creates `Sprites.csv` and outputs scraped data to CSV compatible with GIS 
+* `Sprites.csv`: Output of `Sprite_to_CSV.py` as of December 12, 2022
 * `clean_sprites.py`: Optional run; Loads serialized `failed_cleaned_sprites.p` which was manually cleaned/reformatted from `failed_sprites.p`, geocodes and appends to `sprites.p`
 
 
