@@ -21,7 +21,7 @@ class Sprite_Scraper():
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("ignore-certificate-errors")
         chrome_options.add_argument("user-data-dir=selenium")
-        # chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--headless")
         s = Service('/usr/local/bin/chromedriver')
         driver = webdriver.Chrome(service=s,options=chrome_options)
         self.driver = driver
